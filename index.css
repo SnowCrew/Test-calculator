@@ -11,38 +11,65 @@ body {
   justify-content: center;
 }
 .calc {
-  /* display: flex;
-  flex-direction: column; */
   height: 80vh;
   width: 70vh;
-  border: 3px solid black;
-  border-radius: 20px;
+  border: 1vh solid black;
+  border-radius: 7%;
   display: grid;
-  grid-template-rows: 1fr auto;
+  grid-template-rows: 1fr 2fr;
 }
 .calc-display {
-  display: flex;
+  display: grid;
   justify-content: end;
   align-items: flex-end;
+  grid-template-rows: auto 1fr;
 
-  margin-top: 10px;
+  border-radius: 10%;
+  /* padding: 1vh; */
+  padding-right: 3vh;
+}
+.display {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  font-weight: bold;
+}
+.display-stored-calc {
+  font-size: 5vh;
+  margin-top: 3vh;
+  overflow: hidden;
+}
+.display-result {
+  font-size: 10vh;
+  overflow: hidden;
 }
 .calc-operations {
-  max-height: 100%;
-  max-width: 100%;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  /* grid-template-columns: repeat(4, 1fr); */
+  grid-template-areas:
+    "clear delete percent plus"
+    "seven eight nine minus"
+    "four five six mult"
+    "one two three division"
+    "zero zero point result";
   justify-items: center;
-  grid-gap: 5px;
-  margin-bottom: 10px;
-  margin-top: 10px;
+  grid-gap: 1vh;
+  margin: 1vh;
+}
+.btn.zero {
+  grid-area: zero;
+  width: 90%;
+  border-radius: 10vh;
 }
 .btn {
   display: flex;
   justify-content: center;
   align-items: center;
+
   width: 10vh;
   height: 10vh;
+
+  font-size: 5vh;
 
   border-radius: 100%;
 
