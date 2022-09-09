@@ -1,0 +1,18 @@
+body {
+	margin: 0;
+	padding: 0;
+	background-color: lightsteelblue;
+}
+.container {
+	display: flex;
+	height: 100vh;
+	width: auto;
+	align-items: center;
+	justify-content: center;
+}
+.calc {
+	display: flex;
+	min-height: 50vh;
+	min-width: 50vh;
+	border: 3px solid black;
+}
