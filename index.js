@@ -15,13 +15,13 @@ let nextOperationNumber = '';
 let finish = false;
 
 //Calc button's keys array
-//digit key-values in buttons
+//digit key-values in buttons [".","0",...,"9"]
 let digitKeys = [];
 document.querySelectorAll('.digits').forEach(el => { digitKeys.push(el.textContent) })
-//Math operations key-values in buttons
+//Math operations key-values in buttons ["+", "-", "/", "*", "%"]
 let mathOperationKeys = [];
 document.querySelectorAll('.math-oper').forEach(el => { mathOperationKeys.push(el.textContent) })
-//Clearing one and all
+//Clearing one and all ["C", "DEL"]
 let clearOperationKeys = [];
 document.querySelectorAll('.clear-oper').forEach(el => { clearOperationKeys.push(el.textContent) })
 
@@ -66,8 +66,6 @@ const percent = () => {
 //EventListeners
 document.querySelector('.calc-operations').addEventListener('click', (event) => {
   if (!event.target.classList.contains('btn')) return;
-  // currentOperationsSessionStore.push(event.target.textContent);
-  // calcOperationsChainDisplay.textContent = currentOperationsSessionStore.join("");
 
   //if pressed Clear(C) or delete(DEL)
   if (clearOperationKeys.includes("C" || "DEL")) {
@@ -84,36 +82,65 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
 
   //if pressed digit 0-9 or "."
   if (digitKeys.includes(key)) {
-
+    //First time enter digits
     if (nextOperationNumber === "" && operationSign === "") {
       lastOperationNumber += key;
       calcResultDisplay.textContent = lastOperationNumber;
+      //Calculate result after "="
     } else if (lastOperationNumber !== "" && nextOperationNumber !== "" && finish) {
       nextOperationNumber = key;
       finish = false;
       calcResultDisplay.textContent = nextOperationNumber;
+      // calcOperationsChainDisplay.textContent = `${lastOperationNumber}${operationSign}${nextOperationNumber}`;
     } else {
       nextOperationNumber += key;
       calcResultDisplay.textContent = nextOperationNumber;
+      // calcOperationsChainDisplay.textContent = `${lastOperationNumber}${operationSign}`;
     }
-    console.log(lastOperationNumber, nextOperationNumber, operationSign);
+    console.log(lastOperationNumber, nextOperationNumber, operationSign, 'digit press');
     return;
   }
 
   //if pressed operation +-/* etc.
   if (mathOperationKeys.includes(key)) {
+    if (operationSign && nextOperationNumber === "") {
+      switch (operationSign) {
+        case "+":
+          lastOperationNumber = Number(lastOperationNumber) + Number(nextOperationNumber);
+          break;
+        case "-":
+          lastOperationNumber = Number(lastOperationNumber) - Number(nextOperationNumber)
+          break;
+        case "*":
+          lastOperationNumber = Number(lastOperationNumber) * Number(nextOperationNumber)
+          break;
+        case "/":
+          if (Number(nextOperationNumber) === 0) {
+            lastOperationNumber = 'Error DIV/0!'
+            calcResultDisplay.textContent = lastOperationNumber;
+          } else {
+            lastOperationNumber = Number(lastOperationNumber) / Number(nextOperationNumber)
+          }
+          break;
+      }
+      calcOperationsChainDisplay.textContent = `${lastOperationNumber}${operationSign}${nextOperationNumber}`;
+    }
     operationSign = key;
-    calcResultDisplay.textContent = operationSign;
-    console.log(lastOperationNumber, nextOperationNumber, operationSign);
+    calcOperationsChainDisplay.textContent = `${lastOperationNumber}${operationSign}`;
+    console.log(lastOperationNumber, nextOperationNumber, operationSign, "oper press");
     return;
   }
 
   //After pressing Result btn "="
   if (key === '=') {
+    calcOperationsChainDisplay.textContent = `${lastOperationNumber}${operationSign}${nextOperationNumber}`;
+
     //Only one number entered, we'll count with the same numbers
     if (nextOperationNumber === '') {
       nextOperationNumber = Number(lastOperationNumber);
+      calcOperationsChainDisplay.textContent = `${lastOperationNumber}${operationSign}${nextOperationNumber}`;
     };
+
     //counting logic
     switch (operationSign) {
       case "+":
@@ -136,9 +163,7 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
     }
     finish = true;
     calcResultDisplay.textContent = lastOperationNumber;
-    // currentOperationsSessionStore = [];
-
-    console.log(lastOperationNumber, nextOperationNumber, operationSign)
+    console.log(lastOperationNumber, nextOperationNumber, operationSign, 'result press')
   }
 
 })
