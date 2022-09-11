@@ -91,7 +91,6 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
       nextOperationNumber = key;
       finish = false;
       calcResultDisplay.textContent = nextOperationNumber;
-      // calcOperationsChainDisplay.textContent = `${lastOperationNumber}${operationSign}${nextOperationNumber}`;
     } else {
       nextOperationNumber += key;
       calcResultDisplay.textContent = nextOperationNumber;
@@ -101,8 +100,10 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
     return;
   }
 
-  //if pressed operation +-/* etc.
+  //if pressed operation +-/* etc. 
   if (mathOperationKeys.includes(key)) {
+    //CALCULATING before "=" 
+    //(if we select two numbers and click on action) woking 1 time(because !== "=")
     if (operationSign && nextOperationNumber === "") {
       switch (operationSign) {
         case "+":
@@ -131,9 +132,10 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
     return;
   }
 
-  //After pressing Result btn "="
+  //Calculation After pressing Result btn "="
   if (key === '=') {
     calcOperationsChainDisplay.textContent = `${lastOperationNumber}${operationSign}${nextOperationNumber}`;
+    currentOperationsSessionStore.push(lastOperationNumber, operationSign, nextOperationNumber);
 
     //Only one number entered, we'll count with the same numbers
     if (nextOperationNumber === '') {
@@ -165,5 +167,10 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
     calcResultDisplay.textContent = lastOperationNumber;
     console.log(lastOperationNumber, nextOperationNumber, operationSign, 'result press')
   }
+  //Collection operations you did
+  currentOperationsSessionStore.push("=", lastOperationNumber);
+  resultsStore.push(currentOperationsSessionStore.join(""));
+  currentOperationsSessionStore = [];
+  console.log(resultsStore);
 
 })
