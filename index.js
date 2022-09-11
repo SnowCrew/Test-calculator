@@ -2,7 +2,7 @@
 const resultsStore = [];
 
 //displayed current operations chain
-const currentOperationsSessionStore = [];
+let currentOperationsSessionStore = [];
 
 //displayed information (curr. operations chain and result)
 const calcOperationsChainDisplay = document.querySelector('#display-state');
@@ -30,22 +30,44 @@ const allClear = () => {
   lastOperationNumber = '';
   nextOperationNumber = '';
   operationSign = '';
+  finish = false;
   currentOperationsSessionStore = [];
   calcResultDisplay.textContent = 0;
   calcOperationsChainDisplay.textContent = 0;
 }
 const deleteOneNum = () => {
   if (calcResultDisplay.textContent.length > 1) {
-    calcResultDisplay.textContent = calcResultDisplay.textContent.slice(0, -1);
+    //del last digit on display
+    //if we typing digits first time
+    if (nextOperationNumber === "") {
+      if (lastOperationNumber.length > 1) {
+        lastOperationNumber = lastOperationNumber.slice(0, -1);
+        calcResultDisplay.textContent = calcResultDisplay.textContent.slice(0, -1);
+
+        console.log(lastOperationNumber, "del", typeof nextOperationNumber)
+      }
+    }
+    //if we already have one number to calculate
+    if (nextOperationNumber.length > 1) {
+      nextOperationNumber = nextOperationNumber.slice(0, -1);
+      calcResultDisplay.textContent = calcResultDisplay.textContent.slice(0, -1);
+
+      console.log(nextOperationNumber, "del", typeof nextOperationNumber)
+
+    }
   }
 }
 const percent = () => {
   operationSign = '%';
 }
 
+
+
 //EventListeners
 document.querySelector('.calc-operations').addEventListener('click', (event) => {
   if (!event.target.classList.contains('btn')) return;
+  // currentOperationsSessionStore.push(event.target.textContent);
+  // calcOperationsChainDisplay.textContent = currentOperationsSessionStore.join("");
 
   //if pressed Clear(C) or delete(DEL)
   if (clearOperationKeys.includes("C" || "DEL")) {
@@ -62,6 +84,7 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
 
   //if pressed digit 0-9 or "."
   if (digitKeys.includes(key)) {
+
     if (nextOperationNumber === "" && operationSign === "") {
       lastOperationNumber += key;
       calcResultDisplay.textContent = lastOperationNumber;
@@ -75,7 +98,6 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
     }
     console.log(lastOperationNumber, nextOperationNumber, operationSign);
     return;
-
   }
 
   //if pressed operation +-/* etc.
@@ -110,11 +132,12 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
         } else {
           lastOperationNumber = Number(lastOperationNumber) / Number(nextOperationNumber)
         }
-
         break;
     }
-    // finish = true;
+    finish = true;
     calcResultDisplay.textContent = lastOperationNumber;
+    // currentOperationsSessionStore = [];
+
     console.log(lastOperationNumber, nextOperationNumber, operationSign)
   }
 
