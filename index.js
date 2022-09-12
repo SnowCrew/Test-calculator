@@ -1,10 +1,10 @@
 //history of operations and result
 const resultsStore = [];
 
-//displayed current operations chain
+//displayed current operations chain store
 let currentOperationsSessionStore = [];
 
-//displayed information (curr. operations chain and result)
+//Displayed information (curr. operations chain and result)
 const calcOperationsChainDisplay = document.querySelector('#display-state');
 const calcResultDisplay = document.querySelector('#display-result');
 
@@ -25,24 +25,29 @@ document.querySelectorAll('.math-oper').forEach(el => { mathOperationKeys.push(e
 let clearOperationKeys = [];
 document.querySelectorAll('.clear-oper').forEach(el => { clearOperationKeys.push(el.textContent) })
 
-//Helpers functions
+//Helper functions
 const switchCaseMainCalculation = (sign) => {
   switch (sign) {
     case "+":
-      lastOperationNumber = Number(lastOperationNumber) + Number(nextOperationNumber);
+      lastOperationNumber = (Number(lastOperationNumber) + Number(nextOperationNumber)).toFixed(8);
       break;
     case "-":
-      lastOperationNumber = Number(lastOperationNumber) - Number(nextOperationNumber)
+      lastOperationNumber = (Number(lastOperationNumber) - Number(nextOperationNumber)).toFixed(8);
       break;
     case "*":
-      lastOperationNumber = Number(lastOperationNumber) * Number(nextOperationNumber)
+      lastOperationNumber = (Number(lastOperationNumber) * Number(nextOperationNumber)).toFixed(8);
       break;
     case "/":
       if (Number(nextOperationNumber) === 0) {
-        lastOperationNumber = 'Error DIV/0!'
+        console.log("zerocase")
+        lastOperationNumber = 'Error DIV/0!';
         calcResultDisplay.textContent = lastOperationNumber;
+        lastOperationNumber = "";
+        nextOperationNumber = "";
+        operationSign = "";
+        return;
       } else {
-        lastOperationNumber = Number(lastOperationNumber) / Number(nextOperationNumber)
+        (lastOperationNumber = Number(lastOperationNumber) / Number(nextOperationNumber)).toFixed(8);
       }
       break;
   }
@@ -76,7 +81,6 @@ const deleteOneNum = () => {
       calcResultDisplay.textContent = calcResultDisplay.textContent.slice(0, -1);
 
       console.log(nextOperationNumber, "del")
-
     }
   }
 }
@@ -102,7 +106,16 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
   if (digitKeys.includes(key)) {
     //First time enter digits
     if (nextOperationNumber === "" && operationSign === "") {
-      lastOperationNumber += key;
+      console.log('here?')
+      if (key === "0") {
+        return;
+      }
+      if (key === ".") {
+        lastOperationNumber = "0.";
+        calcResultDisplay.textContent = lastOperationNumber;
+        return;
+      }
+      lastOperationNumber = lastOperationNumber + key;
       calcResultDisplay.textContent = lastOperationNumber;
       //Calculate result after "="
     } else if (lastOperationNumber !== "" && nextOperationNumber !== "" && finish) {
@@ -110,6 +123,7 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
       finish = false;
       calcResultDisplay.textContent = nextOperationNumber;
     } else {
+
       nextOperationNumber += key;
       calcResultDisplay.textContent = nextOperationNumber;
       // calcOperationsChainDisplay.textContent = `${lastOperationNumber}${operationSign}`;
@@ -118,17 +132,34 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
     return;
   }
 
-  //if pressed operation +-/* etc. 
+  //Percent "%" calculation
+  if (key === "%") {
+    console.log('percent')
+    if (lastOperationNumber === "" || lastOperationNumber === "0" || operationSign === "") {
+      console.log('zerocase')
+      lastOperationNumber = Number(0);
+      calcResultDisplay.textContent = lastOperationNumber;
+      return;
+    } else if (lastOperationNumber !== "" && lastOperationNumber !== "0" && operationSign !== "" && nextOperationNumber === "") {
+      nextOperationNumber = Number(lastOperationNumber) * 0, 01 * Number(nextOperationNumber);
+      console.log("a=", lastOperationNumber, "b=", nextOperationNumber, operationSign, "first num and sign case");
+
+      return;
+    } else {
+      console.log('ok case')
+      nextOperationNumber = Number(lastOperationNumber) * 0, 01 * Number(nextOperationNumber)
+    }
+  }
+
+  //if pressed operation +-/* 
   if (mathOperationKeys.includes(key)) {
     //CALCULATING before "=" 
     //(if we select one numbers and click on action)
     if (operationSign !== "" && nextOperationNumber === "") {
       //collection session store data
       currentOperationsSessionStore.push(lastOperationNumber, operationSign, nextOperationNumber);
-
-
+      //Calculation
       switchCaseMainCalculation(operationSign);
-
       calcOperationsChainDisplay.textContent = `${lastOperationNumber}${operationSign}${nextOperationNumber}`;
 
       //Collection operations you did
@@ -136,6 +167,24 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
         currentOperationsSessionStore.push("=", lastOperationNumber);
         resultsStore.push(currentOperationsSessionStore.join(""));
       }
+      currentOperationsSessionStore = [];
+      console.log(resultsStore, currentOperationsSessionStore);
+    } else if (operationSign !== "" && nextOperationNumber !== "") {
+      console.log('here')
+      //collection session store data
+      currentOperationsSessionStore.push(lastOperationNumber, operationSign, nextOperationNumber);
+      //Calculation
+      switchCaseMainCalculation(operationSign);
+      //Collection operations you did
+      if (lastOperationNumber && nextOperationNumber) {
+        currentOperationsSessionStore.push("=", lastOperationNumber);
+        resultsStore.push(currentOperationsSessionStore.join(""));
+      }
+      nextOperationNumber = "";
+      calcResultDisplay.textContent = lastOperationNumber;
+      calcOperationsChainDisplay.textContent = `${lastOperationNumber}${operationSign}${nextOperationNumber}`;
+
+
       currentOperationsSessionStore = [];
       console.log(resultsStore, currentOperationsSessionStore);
     }
@@ -165,7 +214,7 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
     //collection session store data
     currentOperationsSessionStore.push(lastOperationNumber, operationSign, nextOperationNumber);
 
-    //Counting logic !
+    //Calculation
     switchCaseMainCalculation(operationSign);
 
     finish = true;
@@ -180,5 +229,4 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
     currentOperationsSessionStore = [];
     console.log(resultsStore, currentOperationsSessionStore);
   }
-
 })
