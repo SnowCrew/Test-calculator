@@ -57,6 +57,7 @@ const switchCaseMainCalculation = (sign) => {
   }
 }
 //Hepler Clear/delete functions for clear button operations
+//All clear
 const allClear = () => {
   lastOperationNumber = '';
   nextOperationNumber = '';
@@ -66,25 +67,40 @@ const allClear = () => {
   calcResultDisplay.textContent = 0;
   calcOperationsChainDisplay.textContent = 0;
 }
+//delete
 const deleteOneNum = () => {
-  if (calcResultDisplay.textContent.length > 1) {
-    //del last digit on display
-    //if we typing digits first time or don't have second number yet
-    if (nextOperationNumber === "") {
-      if (lastOperationNumber.length > 1) {
-        lastOperationNumber = lastOperationNumber.slice(0, -1);
-        calcResultDisplay.textContent = calcResultDisplay.textContent.slice(0, -1);
-
-        console.log(lastOperationNumber, "del")
-      }
-    }
-    //if we already have one number to calculate
-    if (nextOperationNumber.length > 1) {
-      nextOperationNumber = nextOperationNumber.slice(0, -1);
+  //del last digit on display
+  //if we typing digits first time or don't have second number yet
+  if (nextOperationNumber === "") {
+    if (lastOperationNumber.length > 1) {
+      lastOperationNumber = lastOperationNumber.slice(0, -1);
       calcResultDisplay.textContent = calcResultDisplay.textContent.slice(0, -1);
 
-      console.log(nextOperationNumber, "del")
+      console.log(lastOperationNumber, "del a")
+      return
+    } else if (lastOperationNumber.length === 1 && operationSign !== "") {
+      return;
+    } else {
+      lastOperationNumber = '';
+      calcResultDisplay.textContent = "0";
+
+      console.log(lastOperationNumber, "del a")
+      return;
     }
+  }
+  //if we already have one/first number to calculate
+  if (nextOperationNumber.length > 1) {
+    nextOperationNumber = nextOperationNumber.slice(0, -1);
+    calcResultDisplay.textContent = calcResultDisplay.textContent.slice(0, -1);
+
+    console.log(nextOperationNumber, "del b")
+    return;
+  } else {
+    nextOperationNumber = "";
+    calcResultDisplay.textContent = "0";
+
+    console.log(nextOperationNumber, "del b")
+    return;
   }
 }
 //
@@ -153,21 +169,29 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
   if (key === "%") {
     console.log('percent')
     if (lastOperationNumber === "" || lastOperationNumber === "0" || operationSign === "") {
-      console.log('zerocase')
-      lastOperationNumber = Number(0);
-      calcResultDisplay.textContent = lastOperationNumber;
+      console.log('perc zerocase')
+      lastOperationNumber = "";
+      calcResultDisplay.textContent = "0";
       return;
     } else if (lastOperationNumber !== "" && lastOperationNumber !== "0" && operationSign !== "" && nextOperationNumber === "") {
-      console.log(nextOperationNumber, calcResultDisplay.textContent)
-      nextOperationNumber = (Number(lastOperationNumber) * 0.01 * Number(nextOperationNumber)).toFixed(8);
+      let temporaryPercentVar = lastOperationNumber;
+      nextOperationNumber = fixedNumbers(Number(lastOperationNumber) * 0.01 * Number(lastOperationNumber));
+      console.log(nextOperationNumber)
+      switchCaseMainCalculation(operationSign);
+      //variables magic
+      lastOperationNumber = nextOperationNumber;
+      lastOperationNumber = temporaryPercentVar;
+
       calcResultDisplay.textContent = nextOperationNumber;
-      console.log("a=", lastOperationNumber, "b=", nextOperationNumber, operationSign, "first num and sign case");
+      calcOperationsChainDisplay.textContent = `${Number(lastOperationNumber)}${operationSign}${Number(nextOperationNumber)}`;
+
+      console.log("a=", lastOperationNumber, "b=", nextOperationNumber, operationSign, "perc first num and sign case");
       return;
     } else {
       console.log('ok case')
-      nextOperationNumber = (Number(lastOperationNumber) * 0.01 * Number(nextOperationNumber)).toFixed(8);
+      nextOperationNumber = fixedNumbers(Number(lastOperationNumber) * 0.01 * Number(nextOperationNumber));
       calcResultDisplay.textContent = nextOperationNumber;
-      console.log("a=", lastOperationNumber, "b=", nextOperationNumber, operationSign, "first num and sign case");
+      console.log("a=", lastOperationNumber, "b=", nextOperationNumber, operationSign, "perc last case");
     }
   }
 
@@ -177,25 +201,11 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
       return;
     }
     if ((key === "*" && operationSign === "*") || (key === "/" && operationSign === "/")) {
-      return
+      return;
     }
     //CALCULATING before "=" 
     //(if we select one numbers and click on action)
-    if (operationSign !== "" && nextOperationNumber === "") {
-      //collection session store data
-      currentOperationsSessionStore.push(Number(lastOperationNumber), operationSign, Number(nextOperationNumber));
-      //Calculation
-      switchCaseMainCalculation(operationSign);
-      calcOperationsChainDisplay.textContent = `${lastOperationNumber}${operationSign}${nextOperationNumber}`;
-
-      //Collection operations you did
-      if (lastOperationNumber && nextOperationNumber) {
-        currentOperationsSessionStore.push("=", Number(lastOperationNumber));
-        resultsStore.push(currentOperationsSessionStore.join(""));
-      }
-      currentOperationsSessionStore = [];
-      console.log(resultsStore, currentOperationsSessionStore);
-    } else if (operationSign !== "" && nextOperationNumber !== "") {
+    if (operationSign !== "" && nextOperationNumber !== "") {
       console.log('here')
       //collection session store data
       currentOperationsSessionStore.push(Number(lastOperationNumber), operationSign, Number(nextOperationNumber));
@@ -208,14 +218,14 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
       }
       nextOperationNumber = "";
       calcResultDisplay.textContent = lastOperationNumber;
-      calcOperationsChainDisplay.textContent = `${lastOperationNumber}${operationSign}${nextOperationNumber}`;
-
+      calcOperationsChainDisplay.textContent = `${Number(lastOperationNumber)}${operationSign}${Number(nextOperationNumber)}`;
 
       currentOperationsSessionStore = [];
       console.log(resultsStore, currentOperationsSessionStore);
     }
     operationSign = key;
-    calcOperationsChainDisplay.textContent = `${lastOperationNumber}${operationSign}`;
+    calcResultDisplay.textContent = `${Number(lastOperationNumber)}`;
+    calcOperationsChainDisplay.textContent = `${Number(lastOperationNumber)}${operationSign}`;
     console.log("a=", lastOperationNumber, "b=", nextOperationNumber, operationSign, "oper press");
     return;
   }
@@ -229,12 +239,12 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
       return;
     }
 
-    calcOperationsChainDisplay.textContent = `${lastOperationNumber}${operationSign}${nextOperationNumber}`;
+    calcOperationsChainDisplay.textContent = `${Number(lastOperationNumber)}${operationSign}${Number(nextOperationNumber)}`;
 
     //Only first number entered, we'll count with the same numbers
     if (nextOperationNumber === '' && operationSign !== "") {
       nextOperationNumber = Number(lastOperationNumber);
-      calcOperationsChainDisplay.textContent = `${lastOperationNumber}${operationSign}${nextOperationNumber}`;
+      calcOperationsChainDisplay.textContent = `${Number(lastOperationNumber)}${operationSign}${Number(nextOperationNumber)}`;
     };
 
     //collection session store data
