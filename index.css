@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: lightsteelblue;
+  background: linear-gradient(66deg, #e38010, #1535bf);
 }
 .container {
   display: flex;
@@ -9,11 +9,14 @@ body {
   width: auto;
   align-items: center;
   justify-content: center;
+  font-family: "Roboto", sans-serif;
 }
 .calc {
   height: 80vh;
   width: 70vh;
-  border: 1vh solid black;
+
+  background-color: black;
+
   border-radius: 7%;
   display: grid;
   grid-template-rows: 1fr 2fr;
@@ -21,27 +24,33 @@ body {
 .calc-display {
   display: grid;
   justify-content: end;
-  align-items: flex-end;
   grid-template-rows: auto 1fr;
 
   border-radius: 10%;
-  /* padding: 1vh; */
+  border-bottom: 1px whitesmoke solid;
+
   padding-right: 5vh;
+
+  color: white;
 }
 .display {
   display: flex;
   justify-content: end;
   align-items: center;
-  font-weight: bold;
 }
 .display-stored-calc {
   font-size: 5vh;
   margin-top: 3vh;
+
   overflow: hidden;
+
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 .display-result {
-  font-size: 10vh;
-  overflow: hidden;
+  font-size: 7vh;
 }
 .calc-operations {
   display: grid;
@@ -54,13 +63,15 @@ body {
     "zero zero point result";
   justify-items: center;
   grid-gap: 1vh;
+
   margin: 1vh;
+
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
-.btn.zero {
-  grid-area: zero;
-  width: 90%;
-  border-radius: 10vh;
-}
+
 .btn {
   display: flex;
   justify-content: center;
@@ -74,5 +85,46 @@ body {
   border-radius: 100%;
 
   background-color: black;
-  color: aliceblue;
+  color: snow;
+
+  transition: all ease 0.2s;
+}
+.math-oper,
+.clear-oper,
+.secondary-math-oper {
+  color: rgba(253, 127, 17, 0.934);
+}
+.btn.zero {
+  grid-area: zero;
+  width: 90%;
+  border-radius: 10vh;
+}
+.btn.result {
+  background-color: rgba(253, 127, 17, 0.934);
+}
+
+.math-oper:hover,
+.clear-oper:hover,
+.secondary-math-oper:hover,
+.digits:hover {
+  background-color: rgba(141, 140, 140, 0.272);
+}
+
+.math-oper:active,
+.clear-oper:active,
+.secondary-math-oper:active,
+.digits:active {
+  background-color: rgba(141, 155, 159, 0.621);
+  transform: scale(0.8);
+}
+
+.btn.result:hover {
+  -webkit-transform: scale(0.9);
+  -ms-transform: scale(0.9);
+  transform: scale(0.9);
+}
+.btn.result:active {
+  font-size: xx-large;
+  background-color: rgba(253, 96, 17, 0.934);
+  transform: scale(1.1);
 }
