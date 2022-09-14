@@ -13,7 +13,7 @@ body {
 }
 .calc {
   height: 80vh;
-  width: 70vh;
+  min-width: 80vh;
 
   background-color: black;
 
@@ -29,7 +29,8 @@ body {
   border-radius: 10%;
   border-bottom: 1px whitesmoke solid;
 
-  padding-right: 5vh;
+  padding-right: 1vw;
+  padding-left: 1vw;
 
   color: white;
 }
