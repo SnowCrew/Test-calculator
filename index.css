@@ -1,18 +1,78 @@
 body {
-	margin: 0;
-	padding: 0;
-	background-color: lightsteelblue;
+  margin: 0;
+  padding: 0;
+  background-color: lightsteelblue;
 }
 .container {
-	display: flex;
-	height: 100vh;
-	width: auto;
-	align-items: center;
-	justify-content: center;
+  display: flex;
+  height: 100vh;
+  width: auto;
+  align-items: center;
+  justify-content: center;
 }
 .calc {
-	display: flex;
-	min-height: 50vh;
-	min-width: 50vh;
-	border: 3px solid black;
+  height: 80vh;
+  width: 70vh;
+  border: 1vh solid black;
+  border-radius: 7%;
+  display: grid;
+  grid-template-rows: 1fr 2fr;
+}
+.calc-display {
+  display: grid;
+  justify-content: end;
+  align-items: flex-end;
+  grid-template-rows: auto 1fr;
+
+  border-radius: 10%;
+  /* padding: 1vh; */
+  padding-right: 5vh;
+}
+.display {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  font-weight: bold;
+}
+.display-stored-calc {
+  font-size: 5vh;
+  margin-top: 3vh;
+  overflow: hidden;
+}
+.display-result {
+  font-size: 10vh;
+  overflow: hidden;
+}
+.calc-operations {
+  display: grid;
+  /* grid-template-columns: repeat(4, 1fr); */
+  grid-template-areas:
+    "clear delete percent plus"
+    "seven eight nine minus"
+    "four five six mult"
+    "one two three division"
+    "zero zero point result";
+  justify-items: center;
+  grid-gap: 1vh;
+  margin: 1vh;
+}
+.btn.zero {
+  grid-area: zero;
+  width: 90%;
+  border-radius: 10vh;
+}
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 10vh;
+  height: 10vh;
+
+  font-size: 5vh;
+
+  border-radius: 100%;
+
+  background-color: black;
+  color: aliceblue;
 }

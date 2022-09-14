@@ -11,14 +11,38 @@
     <div class="container">
       <div class="calc">
         <div class="calc-display">
-          <input type="text" name="display" id="display" />
+          <span class="display display-stored-calc" id="display-state">
+            0
+          </span>
+          <span class="display display-result">
+            <span>=</span>
+            <span id="display-result"> 0 </span>
+          </span>
         </div>
         <div class="calc-operations">
-          <button class="plus">+</button>
-          <button class="minus">-</button>
-          <button class="mult">*</button>
-          <button class="division">/</button>
-          <button class="result">=</button>
+          <div class="btn clear-oper clear">C</div>
+          <div class="btn clear-oper delete">DEL</div>
+          <div class="btn secondary-math-oper percent">%</div>
+          <div class="btn math-oper plus">+</div>
+
+          <div class="btn digits seven">7</div>
+          <div class="btn digits eight">8</div>
+          <div class="btn digits nine">9</div>
+          <div class="btn math-oper minus">-</div>
+
+          <div class="btn digits four">4</div>
+          <div class="btn digits five">5</div>
+          <div class="btn digits six">6</div>
+          <div class="btn math-oper mult">*</div>
+
+          <div class="btn digits one">1</div>
+          <div class="btn digits two">2</div>
+          <div class="btn digits three">3</div>
+          <div class="btn math-oper division">/</div>
+
+          <div class="btn digits zero">0</div>
+          <div class="btn digits point">.</div>
+          <div class="btn result">=</div>
         </div>
       </div>
     </div>
