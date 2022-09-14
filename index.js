@@ -17,10 +17,12 @@ let finish = false;
 //Calc button's keys arrays
 //Elements digit key-values in buttons [".","0",...,"9"]
 let digitKeys = [];
-document.querySelectorAll('.digits').forEach(el => { digitKeys.push(el.textContent) })
+const digits = document.querySelectorAll('.digits');
+digits.forEach(el => { digitKeys.push(el.textContent) })
 //Elements math operations key-values in buttons ["+", "-", "/", "*", "%"]
 let mathOperationKeys = [];
-document.querySelectorAll('.math-oper').forEach(el => { mathOperationKeys.push(el.textContent) })
+const mathOperations = document.querySelectorAll('.math-oper');
+mathOperations.forEach(el => { mathOperationKeys.push(el.textContent) });
 //Elements clearing one and all ["C", "DEL"]
 let clearOperationKeys = [];
 document.querySelectorAll('.clear-oper').forEach(el => { clearOperationKeys.push(el.textContent) })
@@ -103,7 +105,6 @@ const deleteOneNum = () => {
     return;
   }
 }
-//
 
 //EventListeners
 document.querySelector('.calc-operations').addEventListener('click', (event) => {
@@ -131,20 +132,17 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
       return;
     }
 
-    //Check amount of digits 16 is enough, 17 with "." max
-    console.log(calcResultDisplay.textContent.length, lastOperationNumber.length)
-    if (calcResultDisplay.textContent.length === 17) {
-      return;
-    }
-    if (calcResultDisplay.textContent.length > 15 && key !== "." && !calcResultDisplay.textContent.includes('.')) {
-      return;
-    }
-
     //First time enter digits
     if (nextOperationNumber === "" && operationSign === "") {
+      //Check amount of digits, 15 max
+      if (calcResultDisplay.textContent.length === 15) {
+        return;
+      }
+      //check two 00
       if (lastOperationNumber === "0" && key === "0") {
         return;
       }
+      //check for only "." without zero before it
       if (key === "." && lastOperationNumber === "") {
         lastOperationNumber = "0.";
         calcResultDisplay.textContent = lastOperationNumber;
@@ -158,6 +156,10 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
       finish = false;
       calcResultDisplay.textContent = nextOperationNumber;
     } else {
+      //Check amount of digits, 15 max
+      if (nextOperationNumber.length === 15) {
+        return;
+      }
       if (key === "." && nextOperationNumber === "") {
         nextOperationNumber = "0.";
         calcResultDisplay.textContent = nextOperationNumber;
