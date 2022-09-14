@@ -107,6 +107,7 @@ const deleteOneNum = () => {
 
 //EventListeners
 document.querySelector('.calc-operations').addEventListener('click', (event) => {
+  //Check click buttons
   if (!event.target.classList.contains('btn')) return;
 
   //if pressed Clear(C) or delete(DEL)
@@ -124,9 +125,21 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
 
   //if pressed digit 0-9 or "."
   if (digitKeys.includes(key)) {
+
+    //check double '.' case
     if (calcResultDisplay.textContent.includes('.') && key === ".") {
       return;
     }
+
+    //Check amount of digits 16 is enough, 17 with "." max
+    console.log(calcResultDisplay.textContent.length, lastOperationNumber.length)
+    if (calcResultDisplay.textContent.length === 17) {
+      return;
+    }
+    if (calcResultDisplay.textContent.length > 15 && key !== "." && !calcResultDisplay.textContent.includes('.')) {
+      return;
+    }
+
     //First time enter digits
     if (nextOperationNumber === "" && operationSign === "") {
       if (lastOperationNumber === "0" && key === "0") {
