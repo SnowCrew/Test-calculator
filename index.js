@@ -27,13 +27,14 @@ mathOperations.forEach(el => { mathOperationKeys.push(el.textContent) });
 //Elements clearing one and all ["C", "DEL"]
 let clearOperationKeys = [];
 document.querySelectorAll('.clear-oper').forEach(el => { clearOperationKeys.push(el.textContent) })
+//Elements All Buttons
+let allBtns = document.querySelectorAll('.btn');
 
 //Helper functions
 //Helper do some magic toFix number and then delete unnecessary zeroes
 const fixedNumbers = (num) => {
   return Number(num.toFixed(8))
 }
-
 //Helper main calculations
 const switchCaseMainCalculation = (sign) => {
   switch (sign) {
@@ -59,6 +60,38 @@ const switchCaseMainCalculation = (sign) => {
       break;
   }
 }
+
+//Helper add or remove "active" class to elements for keyboard
+const allKeyboardKeys = [...digitKeys, ...mathOperationKeys, "Delete", "Backspace", "=", "Enter", "%"];
+const helperswitchCaseActiveClass = (item) => {
+  allBtns.forEach(e => {
+    if (e.textContent === item) {
+      e.classList.toggle('active')
+    }
+  })
+}
+const switchCaseActiveClass = (key) => {
+  switch (key) {
+    case "Enter":
+      helperswitchCaseActiveClass("=")
+      break;
+    case "Backspace":
+      helperswitchCaseActiveClass("DEL")
+      break;
+    case "Delete":
+      helperswitchCaseActiveClass("C");
+      break;
+    case "%":
+      helperswitchCaseActiveClass("%");
+      break;
+  }
+
+  if ([...digitKeys, ...mathOperationKeys].includes(key)) {
+    helperswitchCaseActiveClass(key)
+  }
+}
+
+
 //Hepler Clear/delete functions for clear button operations
 //All clear
 const allClear = () => {
@@ -300,12 +333,15 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
 document.addEventListener('keydown', (event) => {
   //Check if click buttons
   console.log(event.key)
-  if (![...digitKeys, ...mathOperationKeys, "Delete", "Backspace", "=", "Enter", "%"].includes(event.key)) {
+  if (!allKeyboardKeys.includes(event.key)) {
     console.log("not good key")
     return;
   }
+
+
   // Button identification for digits and math operations (what event happened)
   const key = event.key;
+  switchCaseActiveClass(key);
 
   //if pressed Clear(C)/Delete or delete(DEL)/Backspace
   if (key === 'Delete') {
@@ -482,3 +518,16 @@ document.addEventListener('keydown', (event) => {
     console.log(resultsStore, currentOperationsSessionStore);
   }
 })
+//onpressup
+document.addEventListener('keyup', (event) => {
+  //Check if click buttons
+  console.log(event.key)
+  if (!allKeyboardKeys.includes(event.key)) {
+    console.log("not good key")
+    return;
+  }
+
+  // Button identification for digits and math operations (what event happened)
+  const key = event.key;
+  switchCaseActiveClass(key);
+});
