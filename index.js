@@ -7,6 +7,7 @@ let currentOperationsSessionStore = [];
 //Displayed information (curr. operations chain and result)
 const calcOperationsChainDisplay = document.querySelector('#display-state');
 const calcResultDisplay = document.querySelector('#display-result');
+const equalBeforeZero = document.querySelector('#equalBeforeZero');
 
 //Calc logic variables
 let operationSign = '';
@@ -69,6 +70,7 @@ const allClear = () => {
   calcResultDisplay.textContent = 0;
   calcOperationsChainDisplay.textContent = 0;
 }
+
 //delete
 const deleteOneNum = () => {
   //del last digit on display
@@ -108,26 +110,30 @@ const deleteOneNum = () => {
 
 //EventListeners
 document.querySelector('.calc-operations').addEventListener('click', (event) => {
-  //Check click buttons
+  //Check if click buttons
   if (!event.target.classList.contains('btn')) return;
 
+
+
+  // Button identification for digits and math operations (what event happened)
+  const key = event.target.textContent;
+
   //if pressed Clear(C) or delete(DEL)
-  if (clearOperationKeys.includes("C" || "DEL")) {
+  if (clearOperationKeys.includes(key)) {
     if (event.target.textContent === 'C') {
       allClear();
+      equalBeforeZero.textContent = "";
+      return;
     }
     if (event.target.textContent === 'DEL') {
       deleteOneNum();
     }
   }
 
-  // Button identification for digits and math operations
-  const key = event.target.textContent;
-
   //if pressed digit 0-9 or "."
   if (digitKeys.includes(key)) {
 
-    //check double '.' case
+    //Check double '.' case
     if (calcResultDisplay.textContent.includes('.') && key === ".") {
       return;
     }
@@ -138,11 +144,11 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
       if (calcResultDisplay.textContent.length === 15) {
         return;
       }
-      //check two 00
-      if (lastOperationNumber === "0" && key === "0") {
+      //Check two 00
+      if (lastOperationNumber === "" && key === "0") {
         return;
       }
-      //check for only "." without zero before it
+      //Check for only "." without zero before it
       if (key === "." && lastOperationNumber === "") {
         lastOperationNumber = "0.";
         calcResultDisplay.textContent = lastOperationNumber;
@@ -150,6 +156,15 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
       }
       lastOperationNumber += key;
       calcResultDisplay.textContent = lastOperationNumber;
+
+      //Check equal before zero if zero
+      if (calcResultDisplay.textContent === "0") {
+        equalBeforeZero.textContent = "";
+      } else {
+        console.log("equalBeforeZero case", "digit case")
+        equalBeforeZero.textContent = "=";
+      }
+
       //Calculate result after "="
     } else if (lastOperationNumber !== "" && nextOperationNumber !== "" && finish) {
       nextOperationNumber = key;
@@ -176,6 +191,7 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
       calcResultDisplay.textContent = nextOperationNumber;
       // calcOperationsChainDisplay.textContent = `${lastOperationNumber}${operationSign}`;
     }
+
     console.log("a=", lastOperationNumber, "b=", nextOperationNumber, operationSign, 'digit press');
     return;
   }
@@ -221,7 +237,6 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
     //CALCULATING before "=" 
     //(if we select one numbers and click on action)
     if (operationSign !== "" && nextOperationNumber !== "") {
-      console.log('here')
       //collection session store data
       currentOperationsSessionStore.push(Number(lastOperationNumber), operationSign, Number(nextOperationNumber));
       //Calculation
@@ -253,8 +268,7 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
     if (lastOperationNumber === "" && nextOperationNumber === "") {
       return;
     }
-
-    calcOperationsChainDisplay.textContent = `${Number(lastOperationNumber)}${operationSign}${Number(nextOperationNumber)}`;
+    calcOperationsChainDisplay.textContent = `${Number(lastOperationNumber)}${operationSign}${(nextOperationNumber)}`;
 
     //Only first number entered, we'll count with the same numbers
     if (nextOperationNumber === '' && operationSign !== "") {
@@ -280,4 +294,5 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
     currentOperationsSessionStore = [];
     console.log(resultsStore, currentOperationsSessionStore);
   }
+
 })

@@ -13,7 +13,7 @@ body {
 }
 .calc {
   height: 80vh;
-  min-width: 80vh;
+  width: 60vh;
 
   background-color: black;
 
@@ -43,6 +43,8 @@ body {
   font-size: 5vh;
   margin-top: 3vh;
 
+  color: #808080;
+
   overflow: hidden;
 
   -moz-user-select: none;
@@ -51,7 +53,8 @@ body {
   user-select: none;
 }
 .display-result {
-  font-size: 7vh;
+  font-size: 5.75vh;
+  overflow: hidden;
 }
 .calc-operations {
   display: grid;
@@ -102,6 +105,9 @@ body {
 }
 .btn.result {
   background-color: rgba(253, 127, 17, 0.934);
+}
+.btn.minus {
+  font-size: 8vh;
 }
 
 .math-oper:hover,
