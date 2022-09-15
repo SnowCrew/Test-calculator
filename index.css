@@ -122,8 +122,8 @@ body {
   transform: scale(0.8);
 }
 .btn.active {
-  background-color: rgba(141, 155, 159, 0.621);
-  transform: scale(0.8);
+  background-color: rgba(174, 190, 195, 0.621);
+  transform: scale(0.7);
 }
 
 .btn.result:hover {

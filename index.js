@@ -61,7 +61,7 @@ const switchCaseMainCalculation = (sign) => {
   }
 }
 
-//Helper add or remove "active" class to elements for keyboard
+//Helper add or remove "active" class to elements/buttons using keyboard
 const allKeyboardKeys = [...digitKeys, ...mathOperationKeys, "Delete", "Backspace", "=", "Enter", "%"];
 const helperswitchCaseActiveClass = (item) => {
   allBtns.forEach(e => {
@@ -91,7 +91,6 @@ const switchCaseActiveClass = (key) => {
   }
 }
 
-
 //Hepler Clear/delete functions for clear button operations
 //All clear
 const allClear = () => {
@@ -108,6 +107,9 @@ const allClear = () => {
 const deleteOneNum = () => {
   //del last digit on display
   //if we typing digits first time or don't have second number yet
+  if (calcResultDisplay.textContent === "0") {
+    return;
+  }
   if (nextOperationNumber === "") {
     if (lastOperationNumber.length > 1) {
       lastOperationNumber = lastOperationNumber.slice(0, -1);
@@ -199,7 +201,7 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
 
       //Calculate result after "="
     } else if (lastOperationNumber !== "" && nextOperationNumber !== "" && finish) {
-      nextOperationNumber = key;
+      nextOperationNumber += key;
       finish = false;
       calcResultDisplay.textContent = nextOperationNumber;
     } else {
@@ -316,6 +318,7 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
 
     finish = true;
     calcResultDisplay.textContent = lastOperationNumber;
+    nextOperationNumber = ""
     console.log("a=", lastOperationNumber, "b=", nextOperationNumber, operationSign, 'result press')
 
     //Collection operations you did
@@ -324,6 +327,7 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
       resultsStore.push(currentOperationsSessionStore.join(""));
     }
     currentOperationsSessionStore = [];
+
     console.log(resultsStore, currentOperationsSessionStore);
   }
 })
@@ -338,9 +342,12 @@ document.addEventListener('keydown', (event) => {
     return;
   }
 
-
   // Button identification for digits and math operations (what event happened)
   const key = event.key;
+
+  //Add 'active' class on buttons
+  //for bug fix at first remove class 'active'
+  allBtns.forEach(e => { e.classList.remove('active') });//remove "active"
   switchCaseActiveClass(key);
 
   //if pressed Clear(C)/Delete or delete(DEL)/Backspace
@@ -390,7 +397,7 @@ document.addEventListener('keydown', (event) => {
 
       //Calculate result after "="
     } else if (lastOperationNumber !== "" && nextOperationNumber !== "" && finish) {
-      nextOperationNumber = key;
+      nextOperationNumber += key;
       finish = false;
       calcResultDisplay.textContent = nextOperationNumber;
     } else {
@@ -449,7 +456,7 @@ document.addEventListener('keydown', (event) => {
     }
   }
 
-  //if pressed operation +-/* 
+  //if pressed operation +-/*
   if (mathOperationKeys.includes(key)) {
     if (lastOperationNumber === "") {
       return;
@@ -457,7 +464,7 @@ document.addEventListener('keydown', (event) => {
     if ((key === "*" && operationSign === "*") || (key === "/" && operationSign === "/")) {
       return;
     }
-    //CALCULATING before "=" 
+    //CALCULATING before "="
     //(if we select one numbers and click on action)
     if (operationSign !== "" && nextOperationNumber !== "") {
       //collection session store data
@@ -476,6 +483,7 @@ document.addEventListener('keydown', (event) => {
       currentOperationsSessionStore = [];
       console.log(resultsStore, currentOperationsSessionStore);
     }
+
     operationSign = key;
     calcResultDisplay.textContent = `${Number(lastOperationNumber)}`;
     calcOperationsChainDisplay.textContent = `${Number(lastOperationNumber)}${operationSign}`;
@@ -506,6 +514,8 @@ document.addEventListener('keydown', (event) => {
     switchCaseMainCalculation(operationSign);
 
     finish = true;
+    nextOperationNumber = ""
+
     calcResultDisplay.textContent = lastOperationNumber;
     console.log("a=", lastOperationNumber, "b=", nextOperationNumber, operationSign, 'result press')
 
@@ -513,6 +523,7 @@ document.addEventListener('keydown', (event) => {
     if (lastOperationNumber && nextOperationNumber) {
       currentOperationsSessionStore.push("=", Number(lastOperationNumber));
       resultsStore.push(currentOperationsSessionStore.join(""));
+
     }
     currentOperationsSessionStore = [];
     console.log(resultsStore, currentOperationsSessionStore);
