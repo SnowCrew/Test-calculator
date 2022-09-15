@@ -262,6 +262,15 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
 
   //if pressed operation +-/* 
   if (mathOperationKeys.includes(key)) {
+
+    // //Check if first number should be negative 
+    // if (lastOperationNumber === "" && key === "-") {
+    //   lastOperationNumber = "0";
+    //   operationSign = "-";
+    //   calcOperationsChainDisplay.textContent = `${lastOperationNumber}${operationSign}`
+    //   return;
+    // }
+
     if (lastOperationNumber === "") {
       return;
     }
@@ -275,11 +284,11 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
       currentOperationsSessionStore.push(Number(lastOperationNumber), operationSign, Number(nextOperationNumber));
       //Calculation
       switchCaseMainCalculation(operationSign);
+
       //Collection operations you did
-      if (lastOperationNumber && nextOperationNumber) {
-        currentOperationsSessionStore.push("=", Number(lastOperationNumber));
-        resultsStore.push(currentOperationsSessionStore.join(""));
-      }
+      currentOperationsSessionStore.push("=", Number(lastOperationNumber));
+      resultsStore.push(currentOperationsSessionStore.join(""));
+
       nextOperationNumber = "";
       calcResultDisplay.textContent = lastOperationNumber;
       calcOperationsChainDisplay.textContent = `${Number(lastOperationNumber)}${operationSign}${Number(nextOperationNumber)}`;
@@ -318,14 +327,13 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
 
     finish = true;
     calcResultDisplay.textContent = lastOperationNumber;
-    nextOperationNumber = ""
+    nextOperationNumber = "";
     console.log("a=", lastOperationNumber, "b=", nextOperationNumber, operationSign, 'result press')
 
     //Collection operations you did
-    if (lastOperationNumber && nextOperationNumber) {
-      currentOperationsSessionStore.push("=", Number(lastOperationNumber));
-      resultsStore.push(currentOperationsSessionStore.join(""));
-    }
+    currentOperationsSessionStore.push("=", Number(lastOperationNumber));
+    resultsStore.push(currentOperationsSessionStore.join(""));
+
     currentOperationsSessionStore = [];
 
     console.log(resultsStore, currentOperationsSessionStore);
@@ -458,6 +466,15 @@ document.addEventListener('keydown', (event) => {
 
   //if pressed operation +-/*
   if (mathOperationKeys.includes(key)) {
+
+    //Check if first number should be negative 
+    if (lastOperationNumber === "" && key === "-") {
+      lastOperationNumber = "0";
+      operationSign = "-";
+      calcOperationsChainDisplay.textContent = `${lastOperationNumber}${operationSign}`
+      return;
+    }
+
     if (lastOperationNumber === "") {
       return;
     }
@@ -471,11 +488,11 @@ document.addEventListener('keydown', (event) => {
       currentOperationsSessionStore.push(Number(lastOperationNumber), operationSign, Number(nextOperationNumber));
       //Calculation
       switchCaseMainCalculation(operationSign);
+
       //Collection operations you did
-      if (lastOperationNumber && nextOperationNumber) {
-        currentOperationsSessionStore.push("=", Number(lastOperationNumber));
-        resultsStore.push(currentOperationsSessionStore.join(""));
-      }
+      currentOperationsSessionStore.push("=", Number(lastOperationNumber));
+      resultsStore.push(currentOperationsSessionStore.join(""));
+
       nextOperationNumber = "";
       calcResultDisplay.textContent = lastOperationNumber;
       calcOperationsChainDisplay.textContent = `${Number(lastOperationNumber)}${operationSign}${Number(nextOperationNumber)}`;
@@ -520,11 +537,10 @@ document.addEventListener('keydown', (event) => {
     console.log("a=", lastOperationNumber, "b=", nextOperationNumber, operationSign, 'result press')
 
     //Collection operations you did
-    if (lastOperationNumber && nextOperationNumber) {
-      currentOperationsSessionStore.push("=", Number(lastOperationNumber));
-      resultsStore.push(currentOperationsSessionStore.join(""));
+    currentOperationsSessionStore.push("=", Number(lastOperationNumber));
+    resultsStore.push(currentOperationsSessionStore.join(""));
 
-    }
+
     currentOperationsSessionStore = [];
     console.log(resultsStore, currentOperationsSessionStore);
   }
