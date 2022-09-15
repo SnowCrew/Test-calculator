@@ -49,9 +49,7 @@ const switchCaseMainCalculation = (sign) => {
       break;
     case "/":
       if (nextOperationNumber === "0" || nextOperationNumber === 0) {
-        console.log("zerocase", lastOperationNumber, nextOperationNumber)
         lastOperationNumber = 'Error DIV/0!';
-        console.log(lastOperationNumber)
         calcResultDisplay.textContent = 'Error DIV/0!';
         return;
       } else {
@@ -114,16 +112,12 @@ const deleteOneNum = () => {
     if (lastOperationNumber.length > 1) {
       lastOperationNumber = lastOperationNumber.slice(0, -1);
       calcResultDisplay.textContent = calcResultDisplay.textContent.slice(0, -1);
-
-      console.log(lastOperationNumber, "del a")
-      return
+      return;
     } else if (lastOperationNumber.length === 1 && operationSign !== "") {
       return;
     } else {
       lastOperationNumber = '';
       calcResultDisplay.textContent = "0";
-
-      console.log(lastOperationNumber, "del a")
       return;
     }
   }
@@ -131,14 +125,10 @@ const deleteOneNum = () => {
   if (nextOperationNumber.length > 1) {
     nextOperationNumber = nextOperationNumber.slice(0, -1);
     calcResultDisplay.textContent = calcResultDisplay.textContent.slice(0, -1);
-
-    console.log(nextOperationNumber, "del b")
     return;
   } else {
     nextOperationNumber = "";
     calcResultDisplay.textContent = "0";
-
-    console.log(nextOperationNumber, "del b")
     return;
   }
 }
@@ -195,7 +185,6 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
       if (calcResultDisplay.textContent === "0") {
         equalBeforeZero.textContent = "";
       } else {
-        console.log("equalBeforeZero case", "digit case")
         equalBeforeZero.textContent = "=";
       }
 
@@ -225,23 +214,18 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
       calcResultDisplay.textContent = nextOperationNumber;
       // calcOperationsChainDisplay.textContent = `${lastOperationNumber}${operationSign}`;
     }
-
-    console.log("a=", lastOperationNumber, "b=", nextOperationNumber, operationSign, 'digit press');
     return;
   }
 
   //Percent "%" calculation
   if (key === "%") {
-    console.log('percent')
     if (lastOperationNumber === "" || lastOperationNumber === "0" || operationSign === "") {
-      console.log('perc zerocase')
       lastOperationNumber = "";
       calcResultDisplay.textContent = "0";
       return;
     } else if (lastOperationNumber !== "" && lastOperationNumber !== "0" && operationSign !== "" && nextOperationNumber === "") {
       let temporaryPercentVar = lastOperationNumber;
       nextOperationNumber = fixedNumbers(Number(lastOperationNumber) * 0.01 * Number(lastOperationNumber));
-      console.log(nextOperationNumber)
       switchCaseMainCalculation(operationSign);
       //variables magic
       lastOperationNumber = nextOperationNumber;
@@ -250,13 +234,10 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
       calcResultDisplay.textContent = nextOperationNumber;
       calcOperationsChainDisplay.textContent = `${Number(lastOperationNumber)}${operationSign}${Number(nextOperationNumber)}`;
 
-      console.log("a=", lastOperationNumber, "b=", nextOperationNumber, operationSign, "perc first num and sign case");
       return;
     } else {
-      console.log('ok case')
       nextOperationNumber = fixedNumbers(Number(lastOperationNumber) * 0.01 * Number(nextOperationNumber));
       calcResultDisplay.textContent = nextOperationNumber;
-      console.log("a=", lastOperationNumber, "b=", nextOperationNumber, operationSign, "perc last case");
     }
   }
 
@@ -294,12 +275,11 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
       calcOperationsChainDisplay.textContent = `${Number(lastOperationNumber)}${operationSign}${Number(nextOperationNumber)}`;
 
       currentOperationsSessionStore = [];
-      console.log(resultsStore, currentOperationsSessionStore);
+      console.log(resultsStore);
     }
     operationSign = key;
     calcResultDisplay.textContent = `${Number(lastOperationNumber)}`;
     calcOperationsChainDisplay.textContent = `${Number(lastOperationNumber)}${operationSign}`;
-    console.log("a=", lastOperationNumber, "b=", nextOperationNumber, operationSign, "oper press");
     return;
   }
 
@@ -328,7 +308,6 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
     finish = true;
     calcResultDisplay.textContent = lastOperationNumber;
     nextOperationNumber = "";
-    console.log("a=", lastOperationNumber, "b=", nextOperationNumber, operationSign, 'result press')
 
     //Collection operations you did
     currentOperationsSessionStore.push("=", Number(lastOperationNumber));
@@ -336,7 +315,7 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
 
     currentOperationsSessionStore = [];
 
-    console.log(resultsStore, currentOperationsSessionStore);
+    console.log(resultsStore);
   }
 })
 
@@ -344,9 +323,7 @@ document.querySelector('.calc-operations').addEventListener('click', (event) => 
 //onpressdown buttons
 document.addEventListener('keydown', (event) => {
   //Check if click buttons
-  console.log(event.key)
   if (!allKeyboardKeys.includes(event.key)) {
-    console.log("not good key")
     return;
   }
 
@@ -399,7 +376,6 @@ document.addEventListener('keydown', (event) => {
       if (calcResultDisplay.textContent === "0") {
         equalBeforeZero.textContent = "";
       } else {
-        console.log("equalBeforeZero case", "digit case")
         equalBeforeZero.textContent = "=";
       }
 
@@ -430,22 +406,19 @@ document.addEventListener('keydown', (event) => {
       // calcOperationsChainDisplay.textContent = `${lastOperationNumber}${operationSign}`;
     }
 
-    console.log("a=", lastOperationNumber, "b=", nextOperationNumber, operationSign, 'digit press');
     return;
   }
 
   //Percent "%" calculation
   if (key === "%") {
-    console.log('percent')
     if (lastOperationNumber === "" || lastOperationNumber === "0" || operationSign === "") {
-      console.log('perc zerocase')
       lastOperationNumber = "";
       calcResultDisplay.textContent = "0";
       return;
     } else if (lastOperationNumber !== "" && lastOperationNumber !== "0" && operationSign !== "" && nextOperationNumber === "") {
       let temporaryPercentVar = lastOperationNumber;
       nextOperationNumber = fixedNumbers(Number(lastOperationNumber) * 0.01 * Number(lastOperationNumber));
-      console.log(nextOperationNumber)
+
       switchCaseMainCalculation(operationSign);
       //variables magic
       lastOperationNumber = nextOperationNumber;
@@ -454,13 +427,10 @@ document.addEventListener('keydown', (event) => {
       calcResultDisplay.textContent = nextOperationNumber;
       calcOperationsChainDisplay.textContent = `${Number(lastOperationNumber)}${operationSign}${Number(nextOperationNumber)}`;
 
-      console.log("a=", lastOperationNumber, "b=", nextOperationNumber, operationSign, "perc first num and sign case");
       return;
     } else {
-      console.log('ok case')
       nextOperationNumber = fixedNumbers(Number(lastOperationNumber) * 0.01 * Number(nextOperationNumber));
       calcResultDisplay.textContent = nextOperationNumber;
-      console.log("a=", lastOperationNumber, "b=", nextOperationNumber, operationSign, "perc last case");
     }
   }
 
@@ -498,13 +468,12 @@ document.addEventListener('keydown', (event) => {
       calcOperationsChainDisplay.textContent = `${Number(lastOperationNumber)}${operationSign}${Number(nextOperationNumber)}`;
 
       currentOperationsSessionStore = [];
-      console.log(resultsStore, currentOperationsSessionStore);
+      console.log(resultsStore);
     }
 
     operationSign = key;
     calcResultDisplay.textContent = `${Number(lastOperationNumber)}`;
     calcOperationsChainDisplay.textContent = `${Number(lastOperationNumber)}${operationSign}`;
-    console.log("a=", lastOperationNumber, "b=", nextOperationNumber, operationSign, "oper press");
     return;
   }
 
@@ -529,28 +498,21 @@ document.addEventListener('keydown', (event) => {
 
     //Calculation
     switchCaseMainCalculation(operationSign);
-
     finish = true;
     nextOperationNumber = ""
-
     calcResultDisplay.textContent = lastOperationNumber;
-    console.log("a=", lastOperationNumber, "b=", nextOperationNumber, operationSign, 'result press')
 
     //Collection operations you did
     currentOperationsSessionStore.push("=", Number(lastOperationNumber));
     resultsStore.push(currentOperationsSessionStore.join(""));
-
-
     currentOperationsSessionStore = [];
-    console.log(resultsStore, currentOperationsSessionStore);
+    console.log(resultsStore);
   }
 })
 //onpressup
 document.addEventListener('keyup', (event) => {
   //Check if click buttons
-  console.log(event.key)
   if (!allKeyboardKeys.includes(event.key)) {
-    console.log("not good key")
     return;
   }
 
